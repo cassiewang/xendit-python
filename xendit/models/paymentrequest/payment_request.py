@@ -25,11 +25,7 @@ class PaymentRequest(BaseModel):
       - paymentmethod.PaymentMethod
 
     Static Methods:
-<<<<<<< HEAD
       - PaymentRequest.create (API Reference: /Create Payment Method)
-=======
-      - PaymentRequest.create (API Reference: /Create a payment method)
->>>>>>> 7fee56d (wip)
     """
 
     id: str 
@@ -38,7 +34,6 @@ class PaymentRequest(BaseModel):
     updated: str
     reference_id: str
     business_id: str
-<<<<<<< HEAD
     customer_id:str
     amount: float
     country: str
@@ -56,43 +51,6 @@ class PaymentRequest(BaseModel):
 
     def create(
         *,
-=======
-          type: string
-    customer_id:
-          type: string
-        amount:
-          format: double
-          type: number
-        country:
-          $ref: '#/components/schemas/PaymentRequestCountry'
-        currency:
-          $ref: '#/components/schemas/PaymentRequestCurrency'
-        payment_method:
-          $ref: '#/components/schemas/PublicPaymentMethod'
-        description:
-          type: string
-        failure_code:
-          nullable: true
-          type: string
-        capture_method:
-          $ref: '#/components/schemas/PaymentRequestCaptureMethod'
-        initiator:
-          $ref: '#/components/schemas/PaymentRequestInitiator'
-        card_verification_results:
-          $ref: '#/components/schemas/PaymentRequestCardVerificationResults'
-        status:
-          $ref: '#/components/schemas/PaymentRequestStatus'
-        actions:
-          type: array
-          items:
-            $ref: '#/components/schemas/PaymentRequestAction'
-        metadata:
-          $ref: '#/components/schemas/Object'
-        shipping_information:
-          $ref: '#/components/schemas/PaymentRequestShippingInformation'
-
-    def create(
->>>>>>> 7fee56d (wip)
         currency: str,
         amount: float = None,
         reference_id: str = None,
@@ -103,7 +61,6 @@ class PaymentRequest(BaseModel):
         payment_method_id: str=None,
         channel_properties: ChannelProperties.Query=None,
         metadata: dict=None,
-<<<<<<< HEAD
         shipping_information: dict=None,
         capture_method: str=None,
         initiator: str=None,
@@ -163,26 +120,26 @@ class PaymentRequest(BaseModel):
         x_api_version=None,
         **kwargs,
     ):
-        """Get Payment Request by Payment Request ID (API Reference: Payment Methods/Get Payment Method by ID)
+        """Get Payment Request by Payment Request ID (API Reference: Payment Requests/Get Payment Request by ID)
 
         Args:
-          - payment_method_id (str)
+          - payment_request_id (str)
           - **for_user_id (str)
           - **x_api_version (str)
 
         Returns:
-          Payment Method
+          PaymentRequest
 
         Raises:
           XenditError
 
         """
-        url = f"/v2/payment_methods/{payment_method_id}"
+        url = f"/payment_requests/{payment_request_id}"
         headers, _ = _extract_params(
             locals(),
             func_object=PaymentMethod.get,
             headers_params=["for_user_id", "x_idempotency_key", "x_api_version"],
-            ignore_params=["payment_method_id"],
+            ignore_params=["payment_request_id"],
         )
         kwargs["headers"] = headers
 
@@ -191,11 +148,107 @@ class PaymentRequest(BaseModel):
             return PaymentMethod(**resp.body)
         else:
             raise XenditError(resp)
-=======
-        shipping_information: ShippingInformation=None,
-        capture_method: str=None,
-        initiator: str=None,
-        items: List[dict],
+
+    @staticmethod
+    def confirm(
+        *,
+        payment_request_id: str,
+        auth_code: str,
+        for_user_id=None,
+        x_api_version=None,
+        **kwargs,
     ):
-        pass
->>>>>>> 7fee56d (wip)
+        """This endpoint only applies to BRI Direct Debit. This is only applicable for select payment DIRECT_DEBIT channels (BRI Direct Debit, BPI, RCBC, UBP, CHINABANK)
+        This is used when an additional authorization (ex. OTP Validation, PIN validation) is required in order to successfully activate a payment method. This is equivalent to the POST - AUTH action provided when a Payment Method has the status REQUIRES_ACTION.
+        (API Reference: Payment Requests/Confirm Payment Request)
+
+        Args:
+          - payment_request_id (str)
+          - auth_code (str)
+          - **for_user_id (str)
+          - **x_api_version (str)
+
+        Returns:
+          PaymentRequest
+
+        Raises:
+          XenditError
+
+        """
+        url = f"/payment_requests/{payment_request_id}/auth"
+        headers, _ = _extract_params(
+            locals(),
+            func_object=PaymentMethod.confirm,
+            headers_params=["for_user_id", "x_idempotency_key", "x_api_version"],
+            ignore_params=["payment_request_id"],
+        )
+        kwargs["headers"] = headers
+
+        resp = _APIRequestor.post(url, **kwargs)
+        if resp.status_code >= 200 and resp.status_code < 300:
+            return PaymentMethod(**resp.body)
+        else:
+            raise XenditError(resp)
+
+    @staticmethod
+    def list(
+        *,
+        after_id: str = None,
+        before_id: str = None,
+        channel_code: str = None,
+        customer_id: str = None,
+        payment_request_id: str = None,
+        reusability: str = None,
+        status: str = None,
+        type: str = None,
+        limit: int = None,
+        for_user_id=None,
+        x_api_version=None,
+        **kwargs,
+    ):
+        """List retrieves an array of Payment Method objects that match the provided filter.
+        An empty array [] will be returned if no records match the provided parameters.
+        (API Reference: Payment Methods/Fetch Payment Methods)
+
+        Args:
+          - **after_id (str)
+          - **before_id (str)
+          - **channel_code (str)
+          - **customer_id (str)
+          - **id (str)
+          - **reusability (str)
+          - **status (str)
+          - **type (str)
+          - **limit (str)
+          - **for_user_id (str)
+          - **x_api_version (str)
+
+        Returns:
+          PaymentMethod[]
+
+        Raises:
+          XenditError
+
+        """
+        url = "/v2/payment_methods"
+        headers, params = _extract_params(
+            locals(),
+            func_object=PaymentMethod.list,
+            headers_params=["for_user_id", "x_idempotency_key", "x_api_version"],
+            ignore_params=[],
+        )
+        kwargs["headers"] = headers
+        kwargs["params"] = params
+
+        resp = _APIRequestor.get(url, **kwargs)
+        if resp.status_code >= 200 and resp.status_code < 300:
+            has_more = resp.body["has_more"]
+            data = [PaymentMethod(**pm) for pm in resp.body["data"]]
+            return PaymentRequestList(has_more=has_more, data=data)
+        else:
+            raise XenditError(resp)
+
+
+class PaymentRequestList(BaseModel):
+    has_more: bool
+    data: List[PaymentRequestList]
