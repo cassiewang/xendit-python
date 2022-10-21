@@ -2,6 +2,7 @@ from typing import List
 from xendit._api_requestor import _APIRequestor
 from xendit._extract_params import _extract_params
 from xendit.models._base_model import BaseModel
+from xendit.models._base_query import BaseQuery
 from xendit.models.paymentmethod.billing_information import BillingInformation
 from xendit.models.paymentmethod.card.card import Card
 
@@ -345,6 +346,23 @@ class PaymentMethod(BaseModel):
             return PaymentMethod(**resp.body)
         else:
             raise XenditError(resp)
+
+
+    class Query(BaseQuery):
+        type: str
+        reusability: str
+        reference_id: str
+        description: str
+        metadata: dict
+        country: str
+        customer_id: str
+        card: Card.Query
+        direct_debit: DirectDebit.Query
+        ewallet: EWallet.Query
+        over_the_counter: OverTheCounter.Query
+        qr_code: QRCode.Query
+        virtual_account: VirtualAccount.Query
+        billing_information: BillingInformation
 
 
 class PaymentMethodList(BaseModel):

@@ -1,5 +1,7 @@
 from inspect import signature
 
+from xendit.models.paymentrequest.payment_request import PaymentRequest
+
 
 from .models import Balance
 from .models import BatchDisbursement
@@ -50,6 +52,9 @@ class _XenditParamInjector:
 
     def instantiate_payment_method(self) -> PaymentMethod:
         return self.instantiate(PaymentMethod)
+    
+    def instantiate_payment_request(self) -> PaymentRequest:
+        return self.instantiate(PaymentRequest)
 
     def instantiate_payout(self) -> Payout:
         return self.instantiate(Payout)

@@ -7,6 +7,7 @@ from .disbursement import *
 from .ewallet import *
 from .invoice import *
 from .paymentmethod import *
+from .paymentrequest import *
 from .payout import *
 from .qrcode import *
 from .recurringpayment import *

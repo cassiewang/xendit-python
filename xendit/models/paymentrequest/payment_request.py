@@ -11,7 +11,7 @@ class PaymentRequest(BaseModel):
     """PaymentRequest class (API Reference: PaymentRequests)
 
     Related Classes:
-      - paymentmethod.PaymentMethod
+      - paymentmethod.PaymentRequest
 
     Static Methods:
       - PaymentRequest.create (API Reference: /Create Payment Request)
@@ -74,7 +74,7 @@ class PaymentRequest(BaseModel):
           - **description (str)
           - **country (str)
           - **customer_id (str)
-          - **payment_method (paymentmethod.PaymentMethod)
+          - **payment_method (paymentmethod.PaymentRequest)
           - **payment_method_id (str)
           - **channel_properties (ChannelProperties)
           - **metadata (dict)
@@ -95,7 +95,7 @@ class PaymentRequest(BaseModel):
         url = "/payment_requests"
         headers, body = _extract_params(
             locals(),
-            func_object=PaymentMethod.create,
+            func_object=PaymentRequest.create,
             headers_params=["for_user_id", "x_idempotency_key", "x_api_version"],
         )
         kwargs["headers"] = headers
@@ -132,7 +132,7 @@ class PaymentRequest(BaseModel):
         url = f"/payment_requests/{payment_request_id}"
         headers, _ = _extract_params(
             locals(),
-            func_object=PaymentMethod.get,
+            func_object=PaymentRequest.get,
             headers_params=["for_user_id", "x_idempotency_key", "x_api_version"],
             ignore_params=["payment_request_id"],
         )
@@ -140,7 +140,7 @@ class PaymentRequest(BaseModel):
 
         resp = _APIRequestor.get(url, **kwargs)
         if resp.status_code >= 200 and resp.status_code < 300:
-            return PaymentMethod(**resp.body)
+            return PaymentRequest(**resp.body)
         else:
             raise XenditError(resp)
 
@@ -173,7 +173,7 @@ class PaymentRequest(BaseModel):
         url = f"/payment_requests/{payment_request_id}/auth"
         headers, _ = _extract_params(
             locals(),
-            func_object=PaymentMethod.confirm,
+            func_object=PaymentRequest.confirm,
             headers_params=["for_user_id", "x_idempotency_key", "x_api_version"],
             ignore_params=["payment_request_id"],
         )
@@ -181,7 +181,7 @@ class PaymentRequest(BaseModel):
 
         resp = _APIRequestor.post(url, **kwargs)
         if resp.status_code >= 200 and resp.status_code < 300:
-            return PaymentMethod(**resp.body)
+            return PaymentRequest(**resp.body)
         else:
             raise XenditError(resp)
 
@@ -212,7 +212,7 @@ class PaymentRequest(BaseModel):
         url = f"/payment_requests/{payment_request_id}/resend"
         headers, _ = _extract_params(
             locals(),
-            func_object=PaymentMethod.confirm,
+            func_object=PaymentRequest.confirm,
             headers_params=["for_user_id", "x_idempotency_key", "x_api_version"],
             ignore_params=["payment_request_id"],
         )
@@ -220,7 +220,7 @@ class PaymentRequest(BaseModel):
 
         resp = _APIRequestor.post(url, **kwargs)
         if resp.status_code >= 200 and resp.status_code < 300:
-            return PaymentMethod(**resp.body)
+            return PaymentRequest(**resp.body)
         else:
             raise XenditError(resp)
 
@@ -267,7 +267,7 @@ class PaymentRequest(BaseModel):
         url = "/v2/payment_methods"
         headers, params = _extract_params(
             locals(),
-            func_object=PaymentMethod.list,
+            func_object=PaymentRequest.list,
             headers_params=["for_user_id", "x_idempotency_key", "x_api_version"],
             ignore_params=[],
         )
@@ -277,7 +277,7 @@ class PaymentRequest(BaseModel):
         resp = _APIRequestor.get(url, **kwargs)
         if resp.status_code >= 200 and resp.status_code < 300:
             has_more = resp.body["has_more"]
-            data = [PaymentMethod(**pm) for pm in resp.body["data"]]
+            data = [PaymentRequest(**pm) for pm in resp.body["data"]]
             return PaymentRequestList(has_more=has_more, data=data)
         else:
             raise XenditError(resp)
