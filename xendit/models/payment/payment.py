@@ -22,3 +22,8 @@ class Payment(BaseModel):
     created: str
     updated: str
     metadata: dict
+
+
+class PaymentList(BaseModel):
+    has_more: bool
+    data: List[Payment]
