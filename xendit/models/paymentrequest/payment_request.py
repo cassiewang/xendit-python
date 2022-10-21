@@ -64,8 +64,8 @@ class PaymentRequest(BaseModel):
         x_api_version=None,
         **kwargs,
     ):
-        """Send POST Request to create Payment Requ
-        (API Reference: Payment Methods/Create Payment Request)
+        """Send POST Request to create Payment Request
+        (API Reference: Payment Requests/Create Payment Request)
 
         Args:
           - type (str)
@@ -86,12 +86,12 @@ class PaymentRequest(BaseModel):
           - **x_api_version  (str)
 
         Returns:
-          PaymetnRequest
+          PaymentRequest
 
         Raises:
           XenditError
         """
-
+ 
         url = "/payment_requests"
         headers, body = _extract_params(
             locals(),
@@ -110,7 +110,7 @@ class PaymentRequest(BaseModel):
     @staticmethod
     def get(
         *,
-        payment_request_id,
+        payment_request_id: str,
         for_user_id=None,
         x_api_version=None,
         **kwargs,
@@ -265,7 +265,7 @@ class PaymentRequest(BaseModel):
           XenditError
 
         """
-        url = "/v2/payment_methods"
+        url = "/payment_requests"
         headers, params = _extract_params(
             locals(),
             func_object=PaymentRequest.list,

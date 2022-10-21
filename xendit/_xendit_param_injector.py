@@ -1,6 +1,5 @@
 from inspect import signature
 
-from xendit.models.paymentrequest.payment_request import PaymentRequest
 
 
 from .models import Balance
@@ -12,6 +11,7 @@ from .models import Disbursement
 from .models import EWallet
 from .models import Invoice
 from .models import PaymentMethod
+from .models import PaymentRequest
 from .models import Payout
 from .models import QRCode
 from .models import RecurringPayment
