@@ -25,7 +25,11 @@ class PaymentRequest(BaseModel):
       - paymentmethod.PaymentMethod
 
     Static Methods:
+<<<<<<< HEAD
       - PaymentRequest.create (API Reference: /Create Payment Method)
+=======
+      - PaymentRequest.create (API Reference: /Create a payment method)
+>>>>>>> 7fee56d (wip)
     """
 
     id: str 
@@ -34,6 +38,7 @@ class PaymentRequest(BaseModel):
     updated: str
     reference_id: str
     business_id: str
+<<<<<<< HEAD
     customer_id:str
     amount: float
     country: str
@@ -51,6 +56,43 @@ class PaymentRequest(BaseModel):
 
     def create(
         *,
+=======
+          type: string
+    customer_id:
+          type: string
+        amount:
+          format: double
+          type: number
+        country:
+          $ref: '#/components/schemas/PaymentRequestCountry'
+        currency:
+          $ref: '#/components/schemas/PaymentRequestCurrency'
+        payment_method:
+          $ref: '#/components/schemas/PublicPaymentMethod'
+        description:
+          type: string
+        failure_code:
+          nullable: true
+          type: string
+        capture_method:
+          $ref: '#/components/schemas/PaymentRequestCaptureMethod'
+        initiator:
+          $ref: '#/components/schemas/PaymentRequestInitiator'
+        card_verification_results:
+          $ref: '#/components/schemas/PaymentRequestCardVerificationResults'
+        status:
+          $ref: '#/components/schemas/PaymentRequestStatus'
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentRequestAction'
+        metadata:
+          $ref: '#/components/schemas/Object'
+        shipping_information:
+          $ref: '#/components/schemas/PaymentRequestShippingInformation'
+
+    def create(
+>>>>>>> 7fee56d (wip)
         currency: str,
         amount: float = None,
         reference_id: str = None,
@@ -61,6 +103,7 @@ class PaymentRequest(BaseModel):
         payment_method_id: str=None,
         channel_properties: ChannelProperties.Query=None,
         metadata: dict=None,
+<<<<<<< HEAD
         shipping_information: dict=None,
         capture_method: str=None,
         initiator: str=None,
@@ -148,3 +191,11 @@ class PaymentRequest(BaseModel):
             return PaymentMethod(**resp.body)
         else:
             raise XenditError(resp)
+=======
+        shipping_information: ShippingInformation=None,
+        capture_method: str=None,
+        initiator: str=None,
+        items: List[dict],
+    ):
+        pass
+>>>>>>> 7fee56d (wip)
