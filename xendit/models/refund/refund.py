@@ -6,6 +6,18 @@ from xendit.models._base_model import BaseModel
 from xendit.xendit_error import XenditError
 
 class Refund(BaseModel):
+    """Refund class (API Reference: Payment Method)
+
+    Related Classes:
+      - paymentrequest.PaymentRequest
+      - payment.Payment
+
+    Static Methods:
+      - Refund.create (API Reference: /Create Refund)
+      - Refund.get (API Reference: /Get Refund by ID)
+      - Refund.list (API Reference: /Fetch Refunds)
+    """
+
     id: str
     payment_request_id: str
     invoice_id: str
@@ -93,7 +105,7 @@ class Refund(BaseModel):
           XenditError
 
         """
-        url = f"/refunds{refund_id}"
+        url = f"/refunds/{refund_id}"
         headers, _ = _extract_params(
             locals(),
             func_object=Refund.get,

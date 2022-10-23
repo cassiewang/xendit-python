@@ -11,7 +11,9 @@ class PaymentRequest(BaseModel):
     """PaymentRequest class (API Reference: PaymentRequests)
 
     Related Classes:
-      - paymentmethod.PaymentRequest
+      - paymentmethod.PaymentMethod
+      - payment.Payment
+      - refund.Refund
 
     Static Methods:
       - PaymentRequest.create (API Reference: /Create Payment Request)

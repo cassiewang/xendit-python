@@ -29,7 +29,7 @@ class Xendit:
         self.Invoice = param_injector.instantiate_invoice()
         self.PaymentMethod = param_injector.instantiate_payment_method()
         self.PaymentRequest = param_injector.instantiate_payment_request()
-        print("isntantiate", self.PaymentRequest)
+        self.Refund = param_injector.instantiate_refund()
         self.Payout = param_injector.instantiate_payout()
         self.QRCode = param_injector.instantiate_qrcode()
         self.RecurringPayment = param_injector.instantiate_recurring_payment()

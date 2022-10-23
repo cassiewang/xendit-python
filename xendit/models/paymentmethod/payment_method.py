@@ -28,6 +28,8 @@ class PaymentMethod(BaseModel):
       - OverTheCounter
       - QRCode
       - VirtualAccount
+      - paymentrequest.PaymentRequest
+      - payment.Payment
 
     Static Methods:
       - PaymentMethod.create (API Reference: /Create Payment Method)
