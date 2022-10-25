@@ -2,6 +2,7 @@ from typing import List
 from xendit._api_requestor import _APIRequestor
 from xendit._extract_params import _extract_params
 from xendit.models._base_model import BaseModel
+from xendit.models._base_query import BaseQuery
 from xendit.models.paymentmethod.billing_information import BillingInformation
 from xendit.models.paymentmethod.card.card import Card
 
@@ -27,6 +28,8 @@ class PaymentMethod(BaseModel):
       - OverTheCounter
       - QRCode
       - VirtualAccount
+      - paymentrequest.PaymentRequest
+      - payment.Payment
 
     Static Methods:
       - PaymentMethod.create (API Reference: /Create Payment Method)
@@ -35,6 +38,7 @@ class PaymentMethod(BaseModel):
       - PaymentMethod.expire (API Reference: /Expire Payment Method)
       - PaymentMethod.authorize (API Reference: /Authorize Payment Method)
       - PaymentMethod.list (API Reference: /Fetch Payment Methods)
+      - PaymentMethod.list_payments (API Reference: /Fetch Payments by Payment Method ID)
     """
 
     id: str
@@ -345,6 +349,83 @@ class PaymentMethod(BaseModel):
             return PaymentMethod(**resp.body)
         else:
             raise XenditError(resp)
+
+    @staticmethod
+    def list_payments(
+        *,
+        payment_method_id: str,
+        after_id: str = None,
+        before_id: str = None,
+        channel_code: str = None,
+        customer_id: str = None,
+        payment_request_id: str=None,
+        reference_id: str=None,
+        status: str = None,
+        limit: int = None,
+        for_user_id=None,
+        x_api_version=None,
+        **kwargs,
+    ):
+        """This endpoints returns a list of matching Payment objects made on a Payment Method.
+        (API Reference: Payment Methods/Fetch Payments by Payment Method ID)
+
+        Args:
+          - payment_method_id (str)
+          - **after_id (str)
+          - **before_id (str)
+          - **channel_code (str)
+          - **customer_id (str)
+          - **payment_request_id (str)
+          - **reference_id (str)
+          - **status (str)
+          - **limit (str)
+          - **for_user_id (str)
+          - **x_api_version (str)
+
+        Returns:
+          Payment[]
+
+        Raises:
+          XenditError
+
+        """
+
+        from xendit.models.payment.payment import Payment, PaymentList
+
+        url = "/v2/payment_methods"
+        headers, params = _extract_params(
+            locals(),
+            func_object=PaymentMethod.list_payments,
+            headers_params=["for_user_id", "x_idempotency_key", "x_api_version"],
+            ignore_params=[],
+        )
+        kwargs["headers"] = headers
+        kwargs["params"] = params
+    
+        resp = _APIRequestor.get(url, **kwargs)
+        if resp.status_code >= 200 and resp.status_code < 300:
+            has_more = resp.body["has_more"]
+            data = [Payment(**p) for p in resp.body["data"]]
+            return PaymentList(has_more=has_more, data=data)
+        else:
+            raise XenditError(resp)
+
+
+    class Query(BaseQuery):
+        type: str
+        reusability: str
+        reference_id: str
+        description: str
+        metadata: dict
+        country: str
+        customer_id: str
+        card: Card.Query
+        direct_debit: DirectDebit.Query
+        ewallet: EWallet.Query
+        over_the_counter: OverTheCounter.Query
+        qr_code: QRCode.Query
+        virtual_account: VirtualAccount.Query
+        billing_information: BillingInformation
 
 
 class PaymentMethodList(BaseModel):
