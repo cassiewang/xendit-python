@@ -14,6 +14,8 @@ class Xendit:
         base_url="https://api.xendit.co/",
         http_client: HTTPClientInterface = requests,
     ):
+        print("inject", api_key)
+
         injected_params = (api_key, base_url, http_client)
         param_injector = _XenditParamInjector(injected_params)
 
@@ -26,6 +28,8 @@ class Xendit:
         self.EWallet = param_injector.instantiate_ewallet()
         self.Invoice = param_injector.instantiate_invoice()
         self.PaymentMethod = param_injector.instantiate_payment_method()
+        self.PaymentRequest = param_injector.instantiate_payment_request()
+        self.Refund = param_injector.instantiate_refund()
         self.Payout = param_injector.instantiate_payout()
         self.QRCode = param_injector.instantiate_qrcode()
         self.RecurringPayment = param_injector.instantiate_recurring_payment()

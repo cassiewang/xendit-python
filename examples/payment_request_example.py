@@ -1,16 +1,16 @@
 import xendit
 
-from xendit.models.paymentmethod import ewallet
+from xendit.models.PaymentRequest import ewallet
 
 from print_running_function import print_running_function
 
 
-class CreatePaymentMethod:
+class CreatePaymentRequest:
     @staticmethod
     def run(xendit_instance, **kwargs):
         try:
-            payment_method = xendit_instance.PaymentMethod.create(**kwargs)
-            print(payment_method)
+            payment_request = xendit_instance.PaymentRequest.create(**kwargs)
+            print(payment_request)
         except xendit.XenditError as e:
             print("Error status code:", e.status_code)
             print("Error message:", e)
@@ -18,25 +18,27 @@ class CreatePaymentMethod:
     @staticmethod
     def example(xendit_instance):
         args = {
-            "type": "EWALLET",
-            "reusability": "ONE_TIME_USE",
-            "ewallet": ewallet.EWallet.Query(
-                channel_code="PAYMAYA",
-                channel_properties=ewallet.ChannelProperties.Query(
-                    success_return_url="https://mock-test.co",
-                    failure_return_url="https://mock-test.co",
-                    cancel_return_url="https://mock-test.co",
+            "amount": 1500,
+            "currency": "IDR",
+            "payment_method": PaymentMethod.Query(
+                type="EWALLET",
+                reusability="ONE_TIME_USE",
+                ewallet=EWallet.Query(
+                    channel_code="OVO",
+                    channel_properties=EWalletChannelProperties.Query(
+                        mobile_number="+628123123123"
+                    ),
                 ),
             ),
         }
-        print_running_function("xendit.PaymentMethod.create", args)
-        CreatePaymentMethod.run(xendit_instance, **args)
+        print_running_function("xendit.PaymentRequest.create", args)
+        CreatePaymentRequest.run(xendit_instance, **args)
 
 
 def ask_payment_method_input():
     print("Input the action that you want to use")
     print("0. Exit")
-    print("1. Create Payment Method")
+    print("1. Create Payment Request")
     try:
         return int(input())
     except ValueError:
@@ -49,5 +51,5 @@ def payment_method_example(xendit_instance):
     while payment_method_input != 0:
         if payment_method_input == 1:
             print("Running example of Create Payment Method")
-            CreatePaymentMethod.example(xendit_instance)
+            CreatePaymentRequest.example(xendit_instance)
         payment_method_input = ask_payment_method_input()
